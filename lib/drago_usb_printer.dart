@@ -4,10 +4,11 @@ import 'package:flutter/services.dart';
 
 class DragoUsbPrinter {
   static const MethodChannel _channel =
-      const MethodChannel('drago_usb_printer');
+  const MethodChannel('drago_usb_printer');
 
   int vendorId = 0;
   int productId = 0;
+  String id = "";
 
   /// [getUSBDeviceList]
   /// get list of available usb device on android
@@ -27,13 +28,15 @@ class DragoUsbPrinter {
 
   /// [connect]
   /// connect to a printer vai vendorId and productId
-  Future<bool?> connect(int vendorId, int productId) async {
+  Future<bool?> connect(int vendorId, int productId, String id) async {
     this.vendorId = vendorId;
     this.productId = productId;
+    this.id =id;
 
     Map<String, dynamic> params = {
       "vendorId": vendorId,
-      "productId": productId
+      "productId": productId,
+      "productName": id
     };
     final bool? result = await _channel.invokeMethod('connect', params);
     print('connected $result');
@@ -45,7 +48,8 @@ class DragoUsbPrinter {
   Future<bool?> close() async {
     Map<String, dynamic> params = {
       "vendorId": vendorId,
-      "productId": productId
+      "productId": productId,
+      "productName": id
     };
     final bool? result = await _channel.invokeMethod('disconnect', params);
     return result;
@@ -57,7 +61,8 @@ class DragoUsbPrinter {
     Map<String, dynamic> params = {
       "text": text,
       "vendorId": vendorId,
-      "productId": productId
+      "productId": productId,
+      "productName": id
     };
     final bool? result = await _channel.invokeMethod('printText', params);
     return result;
@@ -69,7 +74,8 @@ class DragoUsbPrinter {
     Map<String, dynamic> params = {
       "raw": text,
       "vendorId": vendorId,
-      "productId": productId
+      "productId": productId,
+      "productName": id
     };
     final bool? result = await _channel.invokeMethod('printRawText', params);
     return result;
@@ -81,7 +87,8 @@ class DragoUsbPrinter {
     Map<String, dynamic> params = {
       "data": data,
       "vendorId": vendorId,
-      "productId": productId
+      "productId": productId,
+      "productName": id
     };
     final bool? result = await _channel.invokeMethod('write', params);
     return result;

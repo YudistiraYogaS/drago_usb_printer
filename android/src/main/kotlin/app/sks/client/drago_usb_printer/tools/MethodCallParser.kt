@@ -12,16 +12,18 @@ object MethodCallParser {
     fun parseDevice(call: MethodCall): ExUsbDevice? {
         val vendorId = call.argument<Int>("vendorId")
         val productId = call.argument<Int>("productId")
+        val productName = call.argument<String>("productName")
         var usbDevice: ExUsbDevice? = null
-        if (vendorId != null && productId != null) {
+        if (vendorId != null && productId != null && productName != null) {
             val matchedDevice = UsbDeviceHelper.instance.matchUsbDevice(
-                vendorId = vendorId,
-                productId = productId,
+                    vendorId = vendorId,
+                    productId = productId,
+                    productName = productName,
             )
             matchedDevice?.let {
                 usbDevice = ExUsbDevice(
-                    deviceId = "$vendorId - $productId",
-                    usbDevice = it,
+                        deviceId = "$vendorId - $productId - $productName",
+                        usbDevice = it,
                 )
             }
         }
@@ -37,6 +39,6 @@ object MethodCallParser {
 }
 
 class ExUsbDevice(
-    var deviceId: String,
-    var usbDevice: UsbDevice
+        var deviceId: String,
+        var usbDevice: UsbDevice
 )

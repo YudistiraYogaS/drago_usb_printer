@@ -29,10 +29,10 @@ class UsbDeviceHelper private constructor() {
         this.mContext = context
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             mPermissionIntent =
-                PendingIntent.getActivity(context, 0,  Intent(UsbDeviceReceiver.Config.ACTION_USB_PERMISSION), PendingIntent.FLAG_MUTABLE)
+                    PendingIntent.getActivity(context, 0,  Intent(UsbDeviceReceiver.Config.ACTION_USB_PERMISSION), PendingIntent.FLAG_MUTABLE)
         } else {
             mPermissionIntent =
-                PendingIntent.getActivity(context, 0,  Intent(UsbDeviceReceiver.Config.ACTION_USB_PERMISSION), PendingIntent.FLAG_ONE_SHOT)
+                    PendingIntent.getActivity(context, 0,  Intent(UsbDeviceReceiver.Config.ACTION_USB_PERMISSION), PendingIntent.FLAG_ONE_SHOT)
         }
         usbManager = context.applicationContext.getSystemService(Context.USB_SERVICE) as UsbManager
     }
@@ -103,7 +103,7 @@ class UsbDeviceHelper private constructor() {
     }
 
     //根据 vId、pId、sId 匹配 usbDevice
-    fun matchUsbDevice(vendorId: Int, productId: Int): UsbDevice? {
+    fun matchUsbDevice(vendorId: Int, productId: Int, productName: String): UsbDevice? {
         var usbDevice: UsbDevice? = null
         val deviceList = queryPrinterDevices()
         val hitDevices = arrayListOf<UsbDevice>()
@@ -119,7 +119,7 @@ class UsbDeviceHelper private constructor() {
         }
 
         if (hitDevices.isNotEmpty()) {
-            usbDevice = hitDevices.first()
+            usbDevice = hitDevices.find { it.deviceName == productName}
         }
         return usbDevice
     }

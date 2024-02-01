@@ -59,14 +59,15 @@ class _MyAppState extends State<MyApp> {
               title: new Text(
                   device['manufacturer'] + " " + device['productName']),
               subtitle:
-                  new Text(device['vendorId'] + " " + device['productId']),
+                  new Text(device['vendorId'] + " " + device['productId'] + " " + device["deviceName"]),
               trailing: new IconButton(
                   icon: new Icon(Icons.print),
                   onPressed: () async {
                     int vendorId = int.parse(device['vendorId']);
                     int productId = int.parse(device['productId']);
+                    String id = device['deviceName'];
                     bool? isConnected =
-                        await dragoUsbPrinter.connect(vendorId, productId);
+                        await dragoUsbPrinter.connect(vendorId, productId, id);
                     if (isConnected ?? false) {
                       var data = Uint8List.fromList(utf8
                           .encode(" Hello world Testing ESC POS printer..."));
